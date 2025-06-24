@@ -1,37 +1,11 @@
 "use client";
 
-import {
-  useMiniKit,
-  useAddFrame,
-  useOpenUrl,
-} from "@coinbase/onchainkit/minikit";
-import {
-  Name,
-  Identity,
-  Address,
-  Avatar,
-  EthBalance,
-} from "@coinbase/onchainkit/identity";
-import {
-  ConnectWallet,
-  Wallet,
-  WalletDropdown,
-  WalletDropdownDisconnect,
-} from "@coinbase/onchainkit/wallet";
-import { useEffect, useMemo, useState, useCallback } from "react";
-import { Button } from "./components/DemoComponents";
-import { Icon } from "./components/DemoComponents";
-import { Home } from "./components/DemoComponents";
-import { Features } from "./components/DemoComponents";
+import { useMiniKit } from "@coinbase/onchainkit/minikit";
+import { useEffect} from "react";
 import ChatbotAi from "./components/chatbotAi";
 
 export default function App() {
-  const { setFrameReady, isFrameReady, context } = useMiniKit();
-  const [frameAdded, setFrameAdded] = useState(false);
-  const [activeTab, setActiveTab] = useState("home");
-
-  const addFrame = useAddFrame();
-  const openUrl = useOpenUrl();
+  const { setFrameReady, isFrameReady } = useMiniKit();
 
   useEffect(() => {
     if (!isFrameReady) {
@@ -39,41 +13,18 @@ export default function App() {
     }
   }, [setFrameReady, isFrameReady]);
 
-  const handleAddFrame = useCallback(async () => {
-    const frameAdded = await addFrame();
-    setFrameAdded(Boolean(frameAdded));
-  }, [addFrame]);
-
-  const saveFrameButton = useMemo(() => {
-    if (context && !context.client.added) {
-      return (
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleAddFrame}
-          className="text-[var(--app-accent)] p-4"
-          icon={<Icon name="plus" size="sm" />}
-        >
-          Save Frame
-        </Button>
-      );
-    }
-
-    if (frameAdded) {
-      return (
-        <div className="flex items-center space-x-1 text-sm font-medium text-[#0052FF] animate-fade-out">
-          <Icon name="check" size="sm" className="text-[#0052FF]" />
-          <span>Saved</span>
-        </div>
-      );
-    }
-
-    return null;
-  }, [context, frameAdded, handleAddFrame]);
-
   return (
-    <div className="flex flex-col min-h-screen font-sans text-[var(--app-foreground)] mini-app-theme from-[var(--app-background)] to-[var(--app-gray)]">
-      <div className="w-full max-w-md mx-auto px-4 py-3">
+    <div className="flex flex-col min-h-screen font-sans bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#312e81] text-white">
+      <div className="w-full max-w-md mx-auto px-4 py-10">
+        <div className="flex flex-col items-center mb-10">
+          <div className="flex items-center gap-3 mb-3">
+            <span className="inline-flex items-center justify-center bg-gradient-to-r from-cyan-500 to-blue-700 rounded-full p-3 shadow-2xl">
+              <svg xmlns='http://www.w3.org/2000/svg' className='h-9 w-9 text-white' fill='none' viewBox='0 0 24 24' stroke='currentColor'><path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 4v16m8-8H4' /></svg>
+            </span>
+            <h1 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-500 text-transparent bg-clip-text drop-shadow-lg tracking-tight text-center">Ask with Photo, Get Answers from AI</h1>
+          </div>
+          <p className="text-lg text-slate-300 text-center max-w-md font-medium tracking-wide mt-2"> Upload a photo, type your question — our intelligent AI gives you instant answers. Experience the future of visual Q&A.</p>
+        </div>
         <ChatbotAi />
       </div>
     </div>

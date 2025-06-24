@@ -31,10 +31,14 @@ export const POST = async (req: Request) => {
         },
       }
     );
-    fs.unlinkSync(tempPath); // টেম্প ফাইল ডিলিট করুন
+    console.log(result.data);
+    fs.unlinkSync(tempPath); 
     return NextResponse.json(result.data);
-  } catch (error: any) {
+  } catch (error) {
     fs.unlinkSync(tempPath);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error instanceof Error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+    return NextResponse.json({ error: "Unknown error" }, { status: 500 });
   }
 };
